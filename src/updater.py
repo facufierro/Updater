@@ -2,6 +2,7 @@ import tkinter as tk
 import subprocess
 import os
 import sys
+import shutil
 
 def launch_app():
     # Get the directory where the executable or script is located
@@ -13,8 +14,26 @@ def launch_app():
         base_dir = os.path.dirname(__file__)
     
     exe = os.path.join(base_dir, "app.exe")
+    new_exe = os.path.join(base_dir, "new", "app.exe")
     py = os.path.join(base_dir, "app.py")
     
+    # Check if there's a new version to update to
+    if os.path.exists(new_exe):
+        try:
+            # Replace the old app with the new one
+            if os.path.exists(exe):
+                os.remove(exe)  # Remove old version
+            shutil.copy2(new_exe, exe)  # Copy new version to main location
+            print(f"Updated app.exe with new version from {new_exe}")
+        except Exception as e:
+            print(f"Error updating app: {e}")
+            # If update fails, try to launch the new version directly
+            if os.path.exists(new_exe):
+                subprocess.Popen([new_exe])
+                root.destroy()
+                return
+    
+    # Launch the (possibly updated) app
     if os.path.exists(exe):
         subprocess.Popen([exe])
         root.destroy()

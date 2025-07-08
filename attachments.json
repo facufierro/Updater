@@ -1,6 +1,5 @@
 {
     "files": [
-        "dist/app.exe",
-        "dist/update.exe"
+        "dist/updater.exe"
     ]
 }

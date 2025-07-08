@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['app2.py'],
+    ['updater.py'],
     pathex=[],
     binaries=[],
     datas=[],
@@ -22,7 +22,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='app2',
+    name='updater',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

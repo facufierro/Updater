@@ -3,9 +3,9 @@ import subprocess
 import os
 import sys
 
-def launch_updater():
-    exe = os.path.join(os.path.dirname(__file__), "updater.exe")
-    py = os.path.join(os.path.dirname(__file__), "updater.py")
+def launch_app():
+    exe = os.path.join(os.path.dirname(__file__), "app.exe")
+    py = os.path.join(os.path.dirname(__file__), "app.py")
     if os.path.exists(exe):
         subprocess.Popen([exe])
         root.destroy()
@@ -14,8 +14,8 @@ def launch_updater():
         root.destroy()
 
 root = tk.Tk()
-root.title("v1.0.0")
-tk.Button(root, text="Launch Updater", command=launch_updater, width=20, height=2).pack(padx=40, pady=40)
+root.title("Updater")
+tk.Button(root, text="Update", command=launch_app, width=20, height=2).pack(padx=40, pady=40)
 root.update_idletasks()
 width = root.winfo_width()
 height = root.winfo_height()

@@ -1,8 +1,8 @@
 Write-Host "Building Launcher..." -ForegroundColor Green
-pyinstaller app.spec
+pyinstaller scripts/app.spec
 
 Write-Host "Building Updater..." -ForegroundColor Green
-pyinstaller updater.spec
+pyinstaller scripts/updater.spec
 
 Write-Host ""
 Write-Host "Build complete!" -ForegroundColor Yellow

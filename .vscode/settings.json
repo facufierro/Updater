@@ -1,0 +1,63 @@
+{
+    "actionButtons": {
+        "commands": [
+            {
+                "name": "│‌",
+                "color": "#666666",
+                "tooltip": "Separator",
+                "command": "‌"
+            },
+            {
+                "name": "$(tag) Tag",
+                "color": "#2196F3",
+                "singleInstance": true,
+                "command": "$currentBranch = git branch --show-current; Write-Host \"Creating tag on current branch: $currentBranch\"; $currentTag = git describe --tags --abbrev=0 2>$null; if (-not $currentTag) { $currentTag = 'v1.0.0' }; Write-Host \"Current tag: $currentTag\"; if ($currentTag -match '^v(\\d+)\\.(\\d+)\\.(\\d+)$') { $major = [int]$matches[1]; $minor = [int]$matches[2]; $patch = [int]$matches[3]; $newPatch = $patch + 1; $newVersion = \"v$major.$minor.$newPatch\" } else { $newVersion = 'v1.0.1' }; Write-Host \"Creating tag: $newVersion on latest commit\"; $latestCommit = git rev-parse HEAD; Write-Host \"Latest commit: $latestCommit\"; git tag $newVersion $latestCommit; git push origin $newVersion; Write-Host \"Created and pushed tag: $newVersion\" -ForegroundColor Green",
+                "tooltip": "Auto-increment patch version and create tag on current branch's latest commit",
+                "terminalName": "powershell"
+            },
+            {
+                "name": "$(rocket) Build",
+                "color": "#4CAF50",
+                "singleInstance": true,
+                "command": ".\\scripts\\build.ps1",
+                "tooltip": "Build All",
+                "terminalName": "powershell"
+            },
+            {
+                "name": "$(cloud-upload) Release",
+                "color": "#FF9800",
+                "singleInstance": true,
+                "command": "$version = git describe --tags --abbrev=0 2>$null; if (-not $version) { $version = 'v1.0.0'; Write-Host 'Warning: No git tags found, using default version' }; Write-Host \"Using version: $version\"; $attachments = ''; if (Test-Path 'attachments.json') { $attachmentsData = Get-Content 'attachments.json' | ConvertFrom-Json; if ($attachmentsData.files -and $attachmentsData.files.Count -gt 0) { $attachments = ($attachmentsData.files | Where-Object { Test-Path $_ }) -join ' '; if ($attachments) { Write-Host \"Found attachments: $attachments\" } else { Write-Host 'No valid attachment files found' } } else { Write-Host 'No files specified in attachments.json' } } else { Write-Host 'No attachments.json found, creating release without files' }; $releaseCmd = \"& `\"C:\\Program Files\\GitHub CLI\\gh.exe`\" release create `\"$version`\" $attachments --title `\"$version`\" --notes `\"Release $version`\"\"; Invoke-Expression $releaseCmd",
+                "tooltip": "Create GitHub release from latest git tag with optional attachments",
+                "terminalName": "powershell"
+            },
+            {
+                "name": "$(key) Auth",
+                "color": "#9C27B0",
+                "singleInstance": true,
+                "command": "& \"C:\\Program Files\\GitHub CLI\\gh.exe\" auth login",
+                "tooltip": "Authenticate with GitHub CLI",
+                "terminalName": "powershell"
+            },
+            {
+                "name": "│‌‌",
+                "color": "#666666",
+                "tooltip": "Separator",
+                "command": "‌‌‌"
+            },
+            {
+                "name": "$(gear)",
+                "color": "grey",
+                "tooltip": "Open Workspace Settings",
+                "command": "code-insiders \".vscode\\settings.json\"; exit",
+                "singleInstance": true,
+                "terminalName": "powershell",
+                "focus": false
+            }
+        ],
+        "defaultColor": "#00BCD4",
+        "reloadButton": "$(sync)",
+        "loadNpmCommands": false
+    },
+    "postman.settings.dotenv-detection-notification-visibility": false
+}

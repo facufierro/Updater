@@ -43,15 +43,18 @@ def relaunch_app():
 def check_for_updates():
     try:
         response = requests.get("https://api.github.com/repos/facufierro/Updater/releases/latest")
-        latest_version = response.json()["tag_name"]
+        data = response.json()
+        latest_version = data["tag_name"]
+        
+        messagebox.showinfo("Debug", f"Current: {CURRENT_VERSION}\nLatest: {latest_version}\nResponse: {response.status_code}")
         
         if version.parse(latest_version.lstrip('v')) > version.parse(CURRENT_VERSION.lstrip('v')):
             result = messagebox.askyesno("Update Available", f"New version {latest_version} available. Update now?")
             if result:
                 subprocess.Popen([sys.executable, "update.py"])
                 root.quit()
-    except:
-        pass
+    except Exception as e:
+        messagebox.showerror("Error", f"Update check failed: {str(e)}")
 
 root.after(1000, check_for_updates)
 
